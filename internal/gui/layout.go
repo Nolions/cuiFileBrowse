@@ -5,19 +5,21 @@ import (
 	"github.com/jroimartin/gocui"
 )
 
-func layout(g *gocui.Gui) error {
-	maxX, maxY := g.Size()
-	menuLayoutWidth := int(0.2 * float32(maxX))
-	menuLayoutHeight := maxY - 5
-	contentLayoutWidth := int(float32(maxX) * 0.8)
+type LocationPoint struct {
+	X0 int
+	Y0 int
+	X1 int
+	Y1 int
+}
 
+func (g *GUI) layout(gui *gocui.Gui) error {
 	// menu layout
-	err := menuLayout(g, 0, 0, menuLayoutWidth, menuLayoutHeight)
+	err := g.menuLayout()
 	if err != nil {
 		return err
 	}
 
-	err = contentLayout(g, menuLayoutWidth, 0, contentLayoutWidth, menuLayoutHeight)
+	err = g.contentLayout()
 	if err != nil {
 		return err
 	}
@@ -26,8 +28,8 @@ func layout(g *gocui.Gui) error {
 }
 
 // menu layout
-func menuLayout(g *gocui.Gui, startXPoint, startYPoint, endXPoint, endYPoint int) error {
-	if v, err := g.SetView("menu", 0, 0, endXPoint, endYPoint); err != nil {
+func (g *GUI) menuLayout() error {
+	if v, err := g.Gui.SetView("menu", g.MenuLocation.X0, g.MenuLocation.Y0, g.MenuLocation.X1, g.MenuLocation.Y1); err != nil {
 		if err != gocui.ErrUnknownView {
 			return err
 		}
@@ -45,8 +47,8 @@ func menuLayout(g *gocui.Gui, startXPoint, startYPoint, endXPoint, endYPoint int
 }
 
 // content Layout
-func contentLayout(g *gocui.Gui, startXPoint, startYPoint, endXPoint, endYPoint int) error {
-	if _, err := g.SetView("content", startXPoint, startYPoint, endXPoint, endYPoint); err != nil {
+func (g *GUI) contentLayout() error {
+	if _, err := g.Gui.SetView("content", g.ContentLocation.X0, g.ContentLocation.Y0, g.ContentLocation.X1, g.ContentLocation.Y1); err != nil {
 		if err != gocui.ErrUnknownView {
 			return err
 		}

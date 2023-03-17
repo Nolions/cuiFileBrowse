@@ -6,7 +6,9 @@ import (
 )
 
 type GUI struct {
-	Gui gocui.Gui
+	Gui             gocui.Gui
+	MenuLocation    LocationPoint
+	ContentLocation LocationPoint
 }
 
 // Create
@@ -26,10 +28,16 @@ func Create() *GUI {
 	}
 }
 
+func (g *GUI) Size() (int, int) {
+	return g.Gui.Size()
+}
+
 // SetLayout
 // Layout配置
-func (g *GUI) SetLayout() *GUI {
-	g.Gui.SetManagerFunc(layout)
+func (g *GUI) SetLayout(ml, cl LocationPoint) *GUI {
+	g.MenuLocation = ml
+	g.ContentLocation = cl
+	g.Gui.SetManagerFunc(g.layout)
 	return g
 }
 
