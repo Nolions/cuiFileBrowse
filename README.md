@@ -4,6 +4,7 @@
 
 ## TODO
 
+- [ ] Tool UI Design
 - [ ] layout by `gocui`
 - [ ] get directory and file list by path
 - [ ] integrate
