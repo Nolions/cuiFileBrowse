@@ -6,20 +6,23 @@ import (
 )
 
 type GUI struct {
-	Gui             gocui.Gui
-	MenuLocation    LocationPoint
-	ContentLocation LocationPoint
+	Gui            gocui.Gui
+	MenuPoints     Point
+	ContentPoints  Point
+	EditTextPoints Point
+	BtnPoints      Point
 }
+
+var (
+	viewArr = []string{"menu", "content", "pathInput"}
+	active  = 0
+)
 
 // Create
 // New GUI struct Object
 func Create() *GUI {
 	g, err := gocui.NewGui(gocui.OutputNormal)
 	if err != nil {
-		log.Panicln(err)
-	}
-
-	if err := g.SetKeybinding("", gocui.KeyCtrlC, gocui.ModNone, quit); err != nil {
 		log.Panicln(err)
 	}
 
@@ -34,21 +37,31 @@ func (g *GUI) Size() (int, int) {
 
 // SetLayout
 // Layout配置
-func (g *GUI) SetLayout(ml, cl LocationPoint) *GUI {
-	g.MenuLocation = ml
-	g.ContentLocation = cl
+func (g *GUI) SetLayout(ml, cl, pil, bl Point) *GUI {
+	g.MenuPoints = ml
+	g.ContentPoints = cl
+	g.EditTextPoints = pil
+	g.BtnPoints = bl
+
+	g.Gui.Highlight = true
+	g.Gui.Cursor = true
+	g.Gui.Highlight = true
+	g.Gui.Cursor = true
+	g.Gui.SelFgColor = gocui.ColorGreen
+
 	g.Gui.SetManagerFunc(g.layout)
+
 	return g
 }
 
 // BindingKeys
 // Hotkey binder
 func (g *GUI) BindingKeys() *GUI {
-	if err := g.Gui.SetKeybinding("", gocui.KeyCtrlC, gocui.ModNone, quit); err != nil {
+	if err := g.Gui.SetKeybinding("", gocui.KeyCtrlC, gocui.ModNone, g.quit); err != nil {
 		log.Fatalf("BindingKeys(), KeyCtrlC binding error:%s\n", err.Error())
 	}
 
-	for _, binder := range keyBinders() {
+	for _, binder := range g.keyBinders() {
 		if err := g.Gui.SetKeybinding(binder.ViewName, binder.Key, gocui.ModNone, binder.Action); err != nil {
 			log.Fatalf("BindingKeys(), MouseLeft binding error:%s\n", err.Error())
 		}

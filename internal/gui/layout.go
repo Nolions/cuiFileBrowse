@@ -5,7 +5,7 @@ import (
 	"github.com/jroimartin/gocui"
 )
 
-type LocationPoint struct {
+type Point struct {
 	X0 int
 	Y0 int
 	X1 int
@@ -24,22 +24,38 @@ func (g *GUI) layout(gui *gocui.Gui) error {
 		return err
 	}
 
+	err = g.editTextLayout()
+	if err != nil {
+		return err
+	}
+
+	err = g.btnLayout()
+	if err != nil {
+		return err
+	}
+
 	return nil
 }
 
 // menu layout
 func (g *GUI) menuLayout() error {
-	if v, err := g.Gui.SetView("menu", g.MenuLocation.X0, g.MenuLocation.Y0, g.MenuLocation.X1, g.MenuLocation.Y1); err != nil {
+	if v, err := g.Gui.SetView("menu", g.MenuPoints.X0, g.MenuPoints.Y0, g.MenuPoints.X1, g.MenuPoints.Y1); err != nil {
 		if err != gocui.ErrUnknownView {
 			return err
 		}
 
+		v.Editable = true
 		v.Highlight = true
 		v.SelBgColor = gocui.ColorGreen
 		v.SelFgColor = gocui.ColorBlack
 
-		for _, item := range []string{"Item 1", "Item 2", "Item 3", "Item 4", "Item 5"} {
+		for _, item := range []string{
+			"Item 1", "Item 2", "Item 3", "Item 4", "Item 5", "Item 6", "Item 7", "Item 8", "Item 9", "Item 10"} {
 			_, _ = fmt.Fprintln(v, item)
+		}
+
+		if _, err = g.focus("menu"); err != nil {
+			return err
 		}
 	}
 
@@ -48,11 +64,46 @@ func (g *GUI) menuLayout() error {
 
 // content Layout
 func (g *GUI) contentLayout() error {
-	if _, err := g.Gui.SetView("content", g.ContentLocation.X0, g.ContentLocation.Y0, g.ContentLocation.X1, g.ContentLocation.Y1); err != nil {
+	if v, err := g.Gui.SetView("content", g.ContentPoints.X0, g.ContentPoints.Y0, g.ContentPoints.X1, g.ContentPoints.Y1); err != nil {
 		if err != gocui.ErrUnknownView {
 			return err
 		}
+
+		v.Wrap = true
+		v.Autoscroll = true
 	}
 
 	return nil
+}
+
+// EditText of file path
+func (g *GUI) editTextLayout() error {
+	if v, err := g.Gui.SetView("pathInput", g.EditTextPoints.X0, g.EditTextPoints.Y0, g.EditTextPoints.X1, g.EditTextPoints.Y1); err != nil {
+		if err != gocui.ErrUnknownView {
+			return err
+		}
+
+		v.Editable = true
+		v.Wrap = true
+	}
+	return nil
+}
+
+// Button of Search
+func (g *GUI) btnLayout() error {
+	if v, err := g.Gui.SetView("btn", g.BtnPoints.X0, g.BtnPoints.Y0, g.BtnPoints.X1, g.BtnPoints.Y1); err != nil {
+		if err != gocui.ErrUnknownView {
+			return err
+		}
+
+		_, _ = fmt.Fprintln(v, "Search")
+	}
+	return nil
+}
+
+func (g *GUI) focus(name string) (*gocui.View, error) {
+	if _, err := g.Gui.SetCurrentView(name); err != nil {
+		return nil, err
+	}
+	return g.Gui.SetViewOnTop(name)
 }
