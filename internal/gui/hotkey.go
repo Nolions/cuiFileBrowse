@@ -17,8 +17,8 @@ func (g *GUI) keyBinders() []KeyBinder {
 	var binders []KeyBinder
 	binders = append(binders, KeyBinder{
 		Key:      gocui.MouseLeft,
-		ViewName: MenuView,
-		Action:   g.folderItemClick,
+		ViewName: DirListViewName,
+		Action:   g.dirItemOnClick,
 	})
 
 	binders = append(binders, KeyBinder{
@@ -29,8 +29,8 @@ func (g *GUI) keyBinders() []KeyBinder {
 
 	binders = append(binders, KeyBinder{
 		Key:      gocui.MouseLeft,
-		ViewName: SearchBarButtonView,
-		Action:   g.settingPath,
+		ViewName: SearchBarButtonViewName,
+		Action:   g.searchBtnOnClick,
 	})
 
 	return binders
@@ -42,29 +42,29 @@ func (g *GUI) quit(gui *gocui.Gui, v *gocui.View) error {
 }
 
 // 設置content layout內容
-func (g *GUI) folderItemClick(gui *gocui.Gui, v *gocui.View) error {
+func (g *GUI) dirItemOnClick(gui *gocui.Gui, v *gocui.View) error {
 	//取得點擊項目
 	_, cy := v.Cursor()
-	s, err := v.Line(cy)
+	_, err := v.Line(cy)
 	if err != nil {
-		log.Printf("folderItemClick(), v line error:%s", err.Error())
-		s = ""
+		log.Printf("dirItemOnClick(), v line error:%s", err.Error())
+		_ = ""
 	}
 
 	// TODO 測試用取得字串用
-	out, err := gui.View(ContentView)
-	if err != nil {
-		return err
-	}
-	out.Clear()
-	_, _ = fmt.Fprintln(out, "content: "+s)
+	//out, err := gui.View(FileListViewName)
+	//if err != nil {
+	//	return err
+	//}
+	//out.Clear()
+	//_, _ = fmt.Fprintln(out, "content: "+s)
 
 	return nil
 }
 
-func (g *GUI) settingPath(gui *gocui.Gui, v *gocui.View) error {
+func (g *GUI) searchBtnOnClick(gui *gocui.Gui, v *gocui.View) error {
 	// 取得指定路徑
-	sv, err := gui.View(SearchBarInputView)
+	sv, err := gui.View(SearchBarInputViewName)
 	if err != nil {
 		return err
 	}
@@ -73,13 +73,13 @@ func (g *GUI) settingPath(gui *gocui.Gui, v *gocui.View) error {
 	_, cy := sv.Cursor()
 	s, err := sv.Line(cy)
 
-	out, err := gui.View(ContentView)
+	out, err := gui.View(FileListViewName)
 	if err != nil {
 		return err
 	}
 	out.Clear()
 
-	_, _ = fmt.Fprintln(out, "settingPath: "+s)
+	_, _ = fmt.Fprintln(out, "searchBtnOnClick: "+s)
 
 	return nil
 }

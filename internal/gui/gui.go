@@ -1,26 +1,32 @@
 package gui
 
 import (
+	"github.com/Nolions/cuiFileBrowser/internal/fileSystem"
 	"github.com/jroimartin/gocui"
 	"log"
+	"os"
 )
 
 type GUI struct {
-	Gui            gocui.Gui
-	MenuPoints     Point
-	ContentPoints  Point
-	EditTextPoints Point
-	BtnPoints      Point
+	Gui                      gocui.Gui
+	DirListViewPoints        Point
+	FileListViewPoints       Point
+	SearchBarInputViewPoints Point
+	SearchBarBtnViewPoints   Point
 }
 
 var (
-	viewArr = []string{"menu", "content", "pathInput"}
-	active  = 0
+	viewArr     = []string{DirListViewName, FileListViewName, SearchBarInputViewName}
+	active      = 0
+	dirs, files []os.DirEntry
 )
 
 // Create
 // New GUI struct Object
 func Create() *GUI {
+	// TODO
+	dirs, files = fileSystem.GetFiles(".")
+
 	g, err := gocui.NewGui(gocui.OutputNormal)
 	if err != nil {
 		log.Panicln(err)
@@ -38,10 +44,10 @@ func (g *GUI) Size() (int, int) {
 // SetLayout
 // Layout配置
 func (g *GUI) SetLayout(ml, cl, pil, bl Point) *GUI {
-	g.MenuPoints = ml
-	g.ContentPoints = cl
-	g.EditTextPoints = pil
-	g.BtnPoints = bl
+	g.DirListViewPoints = ml
+	g.FileListViewPoints = cl
+	g.SearchBarInputViewPoints = pil
+	g.SearchBarBtnViewPoints = bl
 
 	g.Gui.Highlight = true
 	g.Gui.Cursor = true
