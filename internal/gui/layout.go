@@ -5,6 +5,13 @@ import (
 	"github.com/jroimartin/gocui"
 )
 
+const (
+	MenuView            = "menu"
+	ContentView         = "content"
+	SearchBarInputView  = "pathInput"
+	SearchBarButtonView = "btn"
+)
+
 type Point struct {
 	X0 int
 	Y0 int
@@ -13,22 +20,25 @@ type Point struct {
 }
 
 func (g *GUI) layout(gui *gocui.Gui) error {
-	// menu layout
+	// dir list layout
 	err := g.menuLayout()
 	if err != nil {
 		return err
 	}
 
+	// file list layout
 	err = g.contentLayout()
 	if err != nil {
 		return err
 	}
 
+	// settingPath input layout
 	err = g.editTextLayout()
 	if err != nil {
 		return err
 	}
 
+	// settingPath button layout
 	err = g.btnLayout()
 	if err != nil {
 		return err
@@ -39,12 +49,11 @@ func (g *GUI) layout(gui *gocui.Gui) error {
 
 // menu layout
 func (g *GUI) menuLayout() error {
-	if v, err := g.Gui.SetView("menu", g.MenuPoints.X0, g.MenuPoints.Y0, g.MenuPoints.X1, g.MenuPoints.Y1); err != nil {
+	if v, err := g.Gui.SetView(MenuView, g.MenuPoints.X0, g.MenuPoints.Y0, g.MenuPoints.X1, g.MenuPoints.Y1); err != nil {
 		if err != gocui.ErrUnknownView {
 			return err
 		}
 
-		v.Editable = true
 		v.Highlight = true
 		v.SelBgColor = gocui.ColorGreen
 		v.SelFgColor = gocui.ColorBlack
@@ -64,7 +73,7 @@ func (g *GUI) menuLayout() error {
 
 // content Layout
 func (g *GUI) contentLayout() error {
-	if v, err := g.Gui.SetView("content", g.ContentPoints.X0, g.ContentPoints.Y0, g.ContentPoints.X1, g.ContentPoints.Y1); err != nil {
+	if v, err := g.Gui.SetView(ContentView, g.ContentPoints.X0, g.ContentPoints.Y0, g.ContentPoints.X1, g.ContentPoints.Y1); err != nil {
 		if err != gocui.ErrUnknownView {
 			return err
 		}
@@ -78,7 +87,7 @@ func (g *GUI) contentLayout() error {
 
 // EditText of file path
 func (g *GUI) editTextLayout() error {
-	if v, err := g.Gui.SetView("pathInput", g.EditTextPoints.X0, g.EditTextPoints.Y0, g.EditTextPoints.X1, g.EditTextPoints.Y1); err != nil {
+	if v, err := g.Gui.SetView(SearchBarInputView, g.EditTextPoints.X0, g.EditTextPoints.Y0, g.EditTextPoints.X1, g.EditTextPoints.Y1); err != nil {
 		if err != gocui.ErrUnknownView {
 			return err
 		}
@@ -91,7 +100,7 @@ func (g *GUI) editTextLayout() error {
 
 // Button of Search
 func (g *GUI) btnLayout() error {
-	if v, err := g.Gui.SetView("btn", g.BtnPoints.X0, g.BtnPoints.Y0, g.BtnPoints.X1, g.BtnPoints.Y1); err != nil {
+	if v, err := g.Gui.SetView(SearchBarButtonView, g.BtnPoints.X0, g.BtnPoints.Y0, g.BtnPoints.X1, g.BtnPoints.Y1); err != nil {
 		if err != gocui.ErrUnknownView {
 			return err
 		}
