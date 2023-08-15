@@ -11,11 +11,11 @@
 
 ### file
 - [X] get directory and file list by path
-- [] get file or dir info
+- [] get file or directory info
 - [] check file or directory is hidde on windows
 - [] check file or directory is hidde on macOS
-- [] create topic by dir name
-- [] create author by dir name
+- [] create topic by directory name
+- [] create author by directory name
 
 ### DB
 - [] insert topics to db
