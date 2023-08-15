@@ -31,6 +31,7 @@ func Create() *GUI {
 	if err != nil {
 		log.Panicln(err)
 	}
+	g.ASCII = true
 
 	return &GUI{
 		Gui: *g,
