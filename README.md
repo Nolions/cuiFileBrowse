@@ -7,13 +7,13 @@
 ### UI
 
 - [X] poc `gocui`
-- [X] layout
+- [ ] layout
 
 ### file
 - [X] get directory and file list by path
 - [X] get file or directory info
-- [ ] check file or directory is hidde on windows
-- [ ] check file or directory is hidde on macOS
+- [X] check file or directory is hidde on windows
+- [X] check file or directory is hidde on macOS
 - [ ] create topic by directory name
 - [ ] create author by directory name
 
@@ -21,3 +21,4 @@
 - [ ] insert topics to db
 - [ ] insert authors info to db
 - [ ] insert file data to db
+
