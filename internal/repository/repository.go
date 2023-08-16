@@ -29,3 +29,7 @@ func (repo *Repository) Close() (err error) {
 
 	return
 }
+
+func (repo *Repository) NewDBSession() *xorm.Session {
+	return repo.db.NewSession()
+}

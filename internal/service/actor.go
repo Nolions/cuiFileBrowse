@@ -71,7 +71,7 @@ func (s *Serv) GetActor(id int64) (*model.Actor, error) {
 	if m == nil {
 		// TODO
 		e := errors.New("no data found")
-		log.Printf("edit actor fail, get actor error: %v\n", e.Error())
+		log.Printf("edit actor fail, error: %v\n", e.Error())
 		return nil, errors.New("no data")
 	}
 

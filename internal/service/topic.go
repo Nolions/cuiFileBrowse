@@ -31,8 +31,8 @@ func (s *Serv) GetTopic(id int64) (*model.Topic, error) {
 	if m == nil {
 		// TODO
 		e := errors.New("no data found")
-		log.Printf("edit topic fail, get topic error: %v\n", e.Error())
-		return nil, errors.New("no data")
+		log.Printf("get topic fail, get topic error: %v\n", e.Error())
+		return nil, e
 	}
 
 	return m, nil
@@ -61,7 +61,7 @@ func (s *Serv) EditTopic(id int64, name string) error {
 	m, err := s.GetTopic(id)
 	if err != nil {
 		// TODO
-		log.Printf("edit topic fail, get topic error: %v\n", err.Error())
+		log.Printf("edit topic fail, get topicl error: %v\n", err.Error())
 		return err
 	}
 
