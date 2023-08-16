@@ -18,7 +18,7 @@
 - [ ] create author by directory name
 
 ### DB
-- [ ] insert topics to db
-- [ ] insert authors info to db
-- [ ] insert file data to db
+- [ ] CRUD topics to db
+- [X] CRUD actor to db
+- [ ] CRUD video data to db
 

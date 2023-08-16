@@ -1,7 +1,7 @@
 package repository
 
 import (
-	"fmt"
+	"log"
 	"xorm.io/xorm"
 )
 
@@ -21,10 +21,10 @@ func (repo *Repository) Close() (err error) {
 	if repo.db != nil {
 		if err = repo.db.Close(); err != nil {
 			// TODO
-			fmt.Printf("repository::Close, Repository(%d) failed to close database connection, err = %v\n", repo.idx, err)
+			log.Printf("repository::Close, Repository(%d) failed to close database connection, err = %v\n", repo.idx, err)
 		}
 		// TODO
-		fmt.Printf("Repository(%d) closed the db connection.\n", repo.idx)
+		log.Printf("Repository(%d) closed the db connection.\n", repo.idx)
 	}
 
 	return
