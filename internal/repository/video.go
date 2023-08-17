@@ -18,8 +18,8 @@ func (repo *Repository) DeleteVideo(id int64) (int64, error) {
 // FindVideo 取得影片
 func (repo *Repository) FindVideo(id int64) (*model.Video, error) {
 	var video model.Video
-	b, err := repo.db.Where("id=?", id).
-		Get(&video)
+
+	b, err := repo.db.Where("id=?", id).Get(&video)
 
 	if err != nil {
 		return nil, err
