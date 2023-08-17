@@ -6,30 +6,29 @@ import (
 	"github.com/Nolions/cuiFileBrowser/internal/model"
 	"github.com/Nolions/cuiFileBrowser/internal/model/resp"
 	"log"
-	"time"
 )
 
 func (s *Serv) CreateVideo(videoName string, topicId int64, actorIds []int64) error {
 	var topic *model.Topic
 	var err error
+	
+	// 寫入影片資料
+	video := model.Video{
+		Name: videoName,
+	}
+
+	// 檢查topic是否存在
 	if topicId > 0 {
 		topic, err = s.GetTopic(topicId)
 		if err != nil { // no found topic
 			return err
 		}
 	}
-
-	// insert to videos
-	t := time.Now()
-	video := model.Video{
-		Name:     videoName,
-		CreateAt: t,
-		UpdateAt: t,
-	}
 	if topic != nil {
 		video.TopicId = sql.NullInt64{Int64: 1, Valid: true}
 	}
 
+	// insert data to videos
 	_, err = s.Repo.InsertVideo(&video)
 	if err != nil {
 		// TODO
@@ -37,22 +36,27 @@ func (s *Serv) CreateVideo(videoName string, topicId int64, actorIds []int64) er
 		return err
 	}
 
-	// insert to videoActors
+	//
+	// 寫入影片關聯的演員資料
+	//
+	videoActors := make([]model.VideoActor, 0)
 	for _, id := range actorIds {
-		// check exist of actor's id
+		// 檢查演員是否存在
 		_, err := s.GetActor(id)
 		if err != nil {
 			// TODO
 			log.Printf("create video fail, insert video fail, check actor id fail, error:%v\n", err.Error())
 			return errors.New("insert video fail, actor id no found")
 		}
-
-		// insert to videoActors
-		_, err = s.Repo.InsertVideoActors(&model.VideoActor{
+		videoActors = append(videoActors, model.VideoActor{
 			ActorId: id,
 			VideoId: video.Id,
 		})
+	}
 
+	if len(videoActors) > 0 {
+		// insert data to video_actors
+		_, err = s.Repo.BatchInsertVideoActors(&videoActors)
 		if err != nil {
 			log.Printf("create video fail, insert video fail, error:%v\n", err.Error())
 			return err

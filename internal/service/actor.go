@@ -4,7 +4,6 @@ import (
 	"errors"
 	"github.com/Nolions/cuiFileBrowser/internal/model"
 	"log"
-	"time"
 )
 
 // CreateActor 建立演員資料
@@ -48,7 +47,6 @@ func (s *Serv) EditActor(id int64, name string) error {
 	var newModel model.Actor
 	newModel = *m
 	newModel.Name = name
-	newModel.UpdateAt = time.Now()
 
 	_, err = s.Repo.UpdateActor(&newModel)
 	if err != nil {

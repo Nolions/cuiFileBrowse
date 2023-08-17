@@ -4,7 +4,6 @@ import (
 	"errors"
 	"github.com/Nolions/cuiFileBrowser/internal/model"
 	"log"
-	"time"
 )
 
 // CreateTopic 建立主題資料
@@ -68,7 +67,6 @@ func (s *Serv) EditTopic(id int64, name string) error {
 	var newModel model.Topic
 	newModel = *m
 	newModel.Name = name
-	newModel.UpdateAt = time.Now()
 
 	_, err = s.Repo.UpdateTopic(&newModel)
 	if err != nil {
